@@ -223,33 +223,6 @@ const DocumentViewer = () => {
                             ))}
                         </Document>
                     )}
-
-                    {/* Render Signatures */}
-                    {signatures.map((sig) => (
-                        <div
-                            key={sig._id}
-                            className="absolute bg-yellow-400 rounded shadow text-sm font-medium select-none"
-                            style={{
-                                top: `${sig.y}%`,
-                                left: `${sig.x}%`,
-                                width: sig.width ? `${sig.width}%` : "15%",
-                                padding: "6px 12px",
-                                cursor: actionType === "resize" ? "se-resize" : "move",
-                            }}
-                            onMouseDown={(e) => handleMouseDown(e, sig._id, "move")}
-                        >
-                            Sign Here
-
-                            {/* Resize Handle */}
-                            <div
-                                onMouseDown={(e) => {
-                                    e.stopPropagation();
-                                    handleMouseDown(e, sig._id, "resize");
-                                }}
-                                className="absolute right-0 top-0 h-full w-3 cursor-ew-resize bg-black"
-                            />
-                        </div>
-                    ))}
                 </div>
             </div>
             <button
