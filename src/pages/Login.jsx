@@ -1,59 +1,85 @@
 import { useState } from "react";
 import API from "../services/api";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import AuthLayout from "../layouts/AuthLayout";
 
 const Login = () => {
-  const [form, setForm] = useState({ email: "", password: "" });
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+    const [email,setEmail] = useState("");
+    const [password,setPassword] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    const handleLogin = async (e) => {
 
-    try {
-      const { data } = await API.post("/api/auth/login", form);
+        e.preventDefault();
 
-      localStorage.setItem("token", data.token);
+        try {
+            const {data} = await API.post("/api/auth/login",{email,password});
 
-      navigate("/dashboard");
-    } catch (error) {
-      alert("Login failed");
-    }
-  };
+            localStorage.setItem("token",data.token);
 
-  return (
-    <div className="flex items-center justify-center h-screen">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-6 shadow rounded w-80"
-      >
-        <h2 className="text-xl font-bold mb-4">Login</h2>
+            toast.success("Login successful");
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          className="w-full mb-3 p-2 border rounded"
-          onChange={handleChange}
-        />
+            navigate("/dashboard");
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          className="w-full mb-3 p-2 border rounded"
-          onChange={handleChange}
-        />
+        } catch(err){
+            toast.error("Invalid credentials");
+        }
+    };
 
-        <button className="w-full bg-blue-500 text-white p-2 rounded">
-          Login
-        </button>
-      </form>
-    </div>
-  );
+    return (
+
+        
+        <AuthLayout>
+
+            <h1 className="absolute top-8 left-10 text-3xl font-bold text-white tracking-widest">
+                <span className="text-indigo-400">Docu</span>Sign
+            </h1>
+
+            <div className="bg-white/10 backdrop-blur-xl p-10 rounded-xl shadow-xl w-[380px] text-white">
+
+                <h2 className="text-3xl font-bold mb-6 text-center">
+                    Welcome Back
+                </h2>
+
+                <form onSubmit={handleLogin} className="space-y-4">
+
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        className="w-full p-3 rounded bg-black/40 border border-gray-700"
+                        onChange={(e)=>setEmail(e.target.value)}
+                    />
+
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        className="w-full p-3 rounded bg-black/40 border border-gray-700"
+                        onChange={(e)=>setPassword(e.target.value)}
+                    />
+
+                    <button className="w-full bg-indigo-500 hover:bg-indigo-600 transition p-3 rounded font-semibold">
+                        Login
+                    </button>
+                    
+                    <div className="text-center mt-4 text-sm">
+                        <span className="text-gray-300">New here? </span>
+
+                        <button
+                            onClick={() => navigate("/register")}
+                            className="text-indigo-400 hover:underline"
+                        >
+                            Create an account
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </AuthLayout>
+    );
 };
 
 export default Login;
