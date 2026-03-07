@@ -40,7 +40,7 @@ const DocumentViewer = () => {
     useEffect(() => {
         const fetchDocument = async () => {
             const { data } = await API.get(`/api/docs/${id}`);
-            setFileUrl(`http://localhost:5000/${data.filePath}`);
+            setFileUrl(`${import.meta.env.VITE_API_URL}/${data.filePath}`);
         };
 
         fetchDocument();
@@ -74,7 +74,7 @@ const DocumentViewer = () => {
         try {
             const { data } = await API.get(`/api/docs/${id}`);
             setDocument(data);
-            setFileUrl(`http://localhost:5000/${data.filePath}`);
+            setFileUrl(`${import.meta.env.VITE_API_URL}/${data.filePath}`);
         } catch (err) {
             console.error(err);
         }
@@ -166,7 +166,7 @@ const DocumentViewer = () => {
     const finalizeDocument = async () => {
         try {
             const { data } = await API.post(`/api/docs/${id}/finalize`);
-            window.open(`http://localhost:5000${data.filePath}`, "_blank");
+            window.open(`${import.meta.env.VITE_API_URL}${data.filePath}`, "_blank");
         } catch (err) {
             console.error(err);
         }
